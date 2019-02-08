@@ -26,3 +26,7 @@ puts Companies.sample['name']
 get '/slack/startup' do
     Companies.sample['name']
 end
+
+post '/slack/startup' do
+    'hello world'
+end

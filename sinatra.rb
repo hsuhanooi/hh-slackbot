@@ -105,6 +105,7 @@ post '/slack/action-endpoint' do
             elsif text.include?('kill it')
                 send_message(channel, "Recorded <@#{user}> would kill it.")
             elsif text.include?('results')
+                company = CurrentState.company
                 send_message(channel, "#{company['name']} was killed in 2013. <@#{user}> wins.")
                 CurrentState.company = nil
             end

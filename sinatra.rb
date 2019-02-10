@@ -85,7 +85,7 @@ post '/slack/action-endpoint' do
     payload = JSON.parse request.body.read
     puts payload
     event = payload['event']
-    token = payload['token']
+    token = 'xoxb-402903356593-546750430932-780cb0fu0hlMJYlOXpZ44krA'
     channel = event['channel']
     text = event['text']
     event_type = event['type']

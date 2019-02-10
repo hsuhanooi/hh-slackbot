@@ -45,6 +45,34 @@ end
 
 puts "Current State: #{CurrentState.company}"
 
+def fund_it(user)
+    if !CurrentState.has_answered?(user)
+        pr = PlayerResponse.new
+        pr.user = user
+        pr.response = 'fund_it'
+        pr.points = CurrentState.company.get_points('fund_it')
+        pr.company_name = CurrentState.company.name
+        CurrentState.player_responses << pr
+        send_message(channel, "Recorded <@#{user}> would fund it.")
+    else
+        send_message(channel, "<@#{user}> already answered.")
+    end
+end
+
+def kill_it(user)
+    if !CurrentState.has_answered?(user)
+        pr = PlayerResponse.new
+        pr.user = user
+        pr.response = 'kill_it'
+        pr.points = CurrentState.company.get_points('kill_it')
+        pr.company_name = CurrentState.company.name
+        CurrentState.player_responses << pr
+        send_message(channel, "Recorded <@#{user}> would kill it.")
+    else
+        send_message(channel, "<@#{user}> already answered.")
+    end
+end
+
 post '/slack/action-endpoint' do
     status 200
     payload = JSON.parse request.body.read
@@ -62,6 +90,13 @@ post '/slack/action-endpoint' do
             status 200
         elsif event_type == 'message'
             p 'Message'
+            if text.include?('fund it')
+                p 'Capture fund it'
+                fund_it(user)
+            elsif text.include?('kill it')
+                p 'Capture kill it'
+                kill_it(user)
+            end
         elsif event_type == 'app_mention'
             if text.include?('leaderboard')
                 p 'Leaderboard'
@@ -82,26 +117,10 @@ post '/slack/action-endpoint' do
             else
                 if text.include?('fund it')
                     p 'Capture fund it'
-                    if !CurrentState.has_answered?(user)
-                        pr = PlayerResponse.new
-                        pr.user = user
-                        pr.response = 'fund_it'
-                        pr.points = CurrentState.company.get_points('fund_it')
-                        pr.company_name = CurrentState.company.name
-                        CurrentState.player_responses << pr
-                        send_message(channel, "Recorded <@#{user}> would fund it.")
-                    end
+                    fund_it(user)
                 elsif text.include?('kill it')
                     p 'Capture kill it'
-                    if !CurrentState.has_answered?(user)
-                        pr = PlayerResponse.new
-                        pr.user = user
-                        pr.response = 'kill_it'
-                        pr.points = CurrentState.company.get_points('kill_it')
-                        pr.company_name = CurrentState.company.name
-                        CurrentState.player_responses << pr
-                        send_message(channel, "Recorded <@#{user}> would kill it.")
-                    end
+                    kill_it(user)
                 elsif text.include?('results')
                     p 'Capture results'
                     if CurrentState.has_response?

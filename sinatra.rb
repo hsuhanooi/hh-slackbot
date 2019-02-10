@@ -63,7 +63,6 @@ post '/slack/action-endpoint' do
         elsif event_type == 'message'
             p 'Message'
         elsif event_type == 'app_mention'
-            status 200
             if text.include?('leaderboard')
                 p 'Leaderboard'
                 leaderboard_text = CurrentState.leaderboard
@@ -113,8 +112,7 @@ post '/slack/action-endpoint' do
     rescue StandardError => e
         puts "Rescued: #{e.inspect}"
     ensure
-        body 'Ok'
-        status 200
+        return [200, 'Ok']
     end
 end
 

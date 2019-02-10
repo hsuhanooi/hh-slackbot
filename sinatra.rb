@@ -3,6 +3,12 @@ require 'csv'
 require 'net/http'
 require 'uri'
 require 'json'
+require 'slack-ruby-client'
+
+Slack.configure do |config|
+  # config.token = ENV['SLACK_API_TOKEN']
+  config.token = 'xoxb-402903356593-546750430932-780cb0fu0hlMJYlOXpZ44krA'
+end
 
 set :bind, '0.0.0.0'
 
@@ -98,7 +104,9 @@ post '/slack/action-endpoint' do
         status 200
     elsif event_type == 'app_mention'
         respond = "Hello world"
-        send_response(token, channel, respond)
+        client = Slack::Web::Client.new
+        client.auth_test
+        client.chat_postMessage(channel: '#fundittest', text: respond, as_user: true)
         body 'Ok'
         status 200
     end

@@ -66,7 +66,7 @@ TEST = {
 def send_response(token, channel, text)
     uri = URI.parse("https://slack.com/api/chat.postMessage")
     header = {
-        'Content-Type': 'application/json',
+        'Content-type': 'application/json',
         'Authorization': "Bearer #{token}"
     }
     http = Net::HTTP.new(uri.host, uri.port)
@@ -76,6 +76,7 @@ def send_response(token, channel, text)
         'channel': channel
     }.to_json
     response = http.request(request)
+    puts response
     puts response.body
 end
 

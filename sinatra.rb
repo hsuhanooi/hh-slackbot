@@ -63,6 +63,7 @@ post '/slack/action-endpoint' do
         elsif event_type == 'message'
             p 'Message'
         elsif event_type == 'app_mention'
+            status 200
             if text.include?('leaderboard')
                 p 'Leaderboard'
                 leaderboard_text = CurrentState.leaderboard

@@ -1,5 +1,8 @@
 require 'sinatra'
 require 'csv'
+require 'net/http'
+require 'uri'
+require 'json'
 
 set :bind, '0.0.0.0'
 
@@ -32,11 +35,70 @@ post '/slack/startup' do
     body 'hello world'
 end
 
+TEST = {
+    "token":"jdDiPnaP3xVzuunW9HCmiISc",
+    "team_id":"TBUSKAGHF",
+    "api_app_id":"AG1AHD2R2",
+    "event":{
+        "client_msg_id":"3d055a7a-ed91-45ec-9644-ec26989f7864",
+        "type":"app_mention",
+        "text":"<@UG2N2CNTE> helo",
+        "user":"UBWEKD6A3",
+        "ts":"1549764382.000700",
+        "channel":"GG3USD4CX",
+        "event_ts":"1549764382.000700"
+    },
+    "type":"event_callback",
+    "event_id":"EvG2N6EZC4",
+    "event_time":1549764382,
+    "authed_users":["UG2N2CNTE"]
+}
+
+# Example response
+# POST https://slack.com/api/chat.postMessage
+# Content-type: application/json
+# Authorization: Bearer YOUR_BOTS_TOKEN
+# {
+#     "text": "Hello <@UA8RXUPSP>! Knock, knock.",
+#     "channel": "CBR2V3XEX"
+# }
+
+def send_response(token, channel, text)
+    uri = URI.parse("https://slack.com/api/chat.postMessage")
+    header = {
+        'Content-Type': 'application/json',
+        'Authorization': "Bearer #{token}"
+    }
+    http = Net::HTTP.new(uri.host, uri.port)
+    request = Net::HTTP::Post.new(uri.request_uri, header)
+    request.body = {
+        'text': text,
+        'channel': channel
+    }.to_json
+    response = http.request(request)
+end
+
+
 post '/slack/action-endpoint' do
-    puts request.body.read
     status 200
-    content_type 'text/plain'
-    request_payload = JSON.parse request.body.read
-    body request_payload['challenge']
+    payload = JSON.parse request.body.read
+    puts payload
+    event = payload['event']
+    token = payload['token']
+    channel = event['channel']
+    text = event['text']
+    event_type = event['type']
+    user = event['user']
+
+    if event_type == 'challenge'
+        content_type 'text/plain'
+        body request_payload['challenge']
+        status 200
+    elsif event_type == 'app_mention'
+        respond = "Hello <@#{user}>"
+        send_response(token, channel, )
+        body 'Ok'
+        status 200
+    end
 end
 

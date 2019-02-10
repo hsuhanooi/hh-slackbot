@@ -99,10 +99,9 @@ post '/slack/action-endpoint' do
                     send_message(channel, CurrentState.current_results)
                     CurrentState.mark_played
                     CurrentState.company = nil
-                    CurrentState.save('results.json')
                 end
             end
-            CurrentState.save
+            CurrentState.save('results.json')
         end
     rescue StandardError => e
         puts "Rescued: #{e.inspect}"

@@ -35,9 +35,11 @@ TEST = {
 
 CurrentState = State.load('results.json')
 
+Client = Slack::Web::Client.new
+Client.test_auth
+
 def send_message(channel, text)
-    client = Slack::Web::Client.new
-    client.chat_postMessage(channel: channel, text: text, as_user: true)
+    Client.chat_postMessage(channel: channel, text: text, as_user: true)
 end
 
 post '/slack/action-endpoint' do

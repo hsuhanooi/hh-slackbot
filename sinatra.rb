@@ -76,22 +76,26 @@ post '/slack/action-endpoint' do
             else
                 if text.include?('fund it')
                     p 'Capture fund it'
-                    pr = PlayerResponse.new
-                    pr.user = user
-                    pr.response = 'fund_it'
-                    pr.points = CurrentState.company.get_points('fund_it')
-                    pr.company_name = CurrentState.company.name
-                    CurrentState.player_responses << pr
-                    send_message(channel, "Recorded <@#{user}> would fund it.")
+                    if !CurrentState.has_answered?(user)
+                        pr = PlayerResponse.new
+                        pr.user = user
+                        pr.response = 'fund_it'
+                        pr.points = CurrentState.company.get_points('fund_it')
+                        pr.company_name = CurrentState.company.name
+                        CurrentState.player_responses << pr
+                        send_message(channel, "Recorded <@#{user}> would fund it.")
+                    end
                 elsif text.include?('kill it')
                     p 'Capture kill it'
-                    pr = PlayerResponse.new
-                    pr.user = user
-                    pr.response = 'kill_it'
-                    pr.points = CurrentState.company.get_points('kill_it')
-                    pr.company_name = CurrentState.company.name
-                    CurrentState.player_responses << pr
-                    send_message(channel, "Recorded <@#{user}> would kill it.")
+                    if !CurrentState.has_answered?(user)
+                        pr = PlayerResponse.new
+                        pr.user = user
+                        pr.response = 'kill_it'
+                        pr.points = CurrentState.company.get_points('kill_it')
+                        pr.company_name = CurrentState.company.name
+                        CurrentState.player_responses << pr
+                        send_message(channel, "Recorded <@#{user}> would kill it.")
+                    end
                 elsif text.include?('results')
                     p 'Capture results'
                     company = CurrentState.company

@@ -92,7 +92,7 @@ post '/slack/action-endpoint' do
     payload = JSON.parse request.body.read
     puts payload
     event = payload['event']
-    token = 'xoxb-402903356593-546750430932-780cb0fu0hlMJYlOXpZ44krA'
+    token = 'xoxb-402903356593-546750430932-rXg4ZuWkHfxjVQVcgtuIbckp'
     channel = event['channel']
     text = event['text']
     event_type = event['type']
@@ -104,9 +104,7 @@ post '/slack/action-endpoint' do
         status 200
     elsif event_type == 'app_mention'
         respond = "Hello world"
-        client = Slack::Web::Client.new
-        client.auth_test
-        client.chat_postMessage(channel: '#fundittest', text: respond, as_user: true)
+        send_response(token, channel, respond)
         body 'Ok'
         status 200
     end

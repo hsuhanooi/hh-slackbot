@@ -4,7 +4,7 @@ require 'net/http'
 require 'uri'
 require 'json'
 require 'slack-ruby-client'
-require 'model.rb'
+require_relative 'model'
 
 SLACK_API_TOKEN = ENV['SLACK_API_TOKEN']
 

@@ -97,7 +97,7 @@ post '/slack/action-endpoint' do
         body request_payload['challenge']
         status 200
     elsif event_type == 'app_mention'
-        respond = "Hello <@#{user}>"
+        respond = "Hello world"
         send_response(token, channel, respond)
         body 'Ok'
         status 200

@@ -72,8 +72,12 @@ post '/slack/action-endpoint' do
                     p 'New Startup'
                     send_message(channel, "Ok <@#{user}>. Let's play.")
                     company = CurrentState.get_new_company
-                    send_message(channel, "#{company.name} was started in #{company.year_founded}. It does #{company.description}. Would you fund it?")
-                    CurrentState.company = company
+                    if company
+                        send_message(channel, "#{company.name} was started in #{company.year_founded}. It does #{company.description}. Would you fund it?")
+                        CurrentState.company = company
+                    else
+                        send_message(channel, 'Thanks for playing. We ran out of startups.')
+                    end
                 end
             else
                 if text.include?('fund it')

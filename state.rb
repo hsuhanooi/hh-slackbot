@@ -26,6 +26,8 @@ class State
 
     def get_new_company
         comp = Companies.sample(1).first
+        return nil if Companies.size == self.companies_played.size
+
         while (comp)
             if self.companies_played.include?(comp.name)
                 comp = Companies.sample(1).first

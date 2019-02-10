@@ -96,7 +96,7 @@ post '/slack/action-endpoint' do
         status 200
     elsif event_type == 'app_mention'
         respond = "Hello <@#{user}>"
-        send_response(token, channel, )
+        send_response(token, channel, respond)
         body 'Ok'
         status 200
     end

@@ -104,7 +104,8 @@ post '/slack/action-endpoint' do
             end
             CurrentState.save
         end
-    rescue
+    rescue StandardError => e
+        puts "Rescued: #{e.inspect}"
     ensure
         body 'Ok'
         status 200

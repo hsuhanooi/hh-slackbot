@@ -28,5 +28,15 @@ get '/slack/startup' do
 end
 
 post '/slack/startup' do
-    'hello world'
+    status 200
+    body 'hello world'
 end
+
+post '/slack/action-endpoint' do
+    puts request.body.read
+    status 200
+    content_type 'text/plain'
+    request_payload = JSON.parse request.body.read
+    body request_payload['challenge']
+end
+

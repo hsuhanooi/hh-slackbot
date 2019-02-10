@@ -96,7 +96,7 @@ post '/slack/action-endpoint' do
             if text.include?('new startup')
                 send_message(channel, "Ok <@#{user}>. Let's play.")
                 company = Companies.sample(1).first
-                send_message("#{company['name']} was started in 2007. It does magic. Would you fund it?")
+                send_message(channel, "#{company['name']} was started in 2007. It does magic. Would you fund it?")
                 CurrentState.company = company
             end
         else

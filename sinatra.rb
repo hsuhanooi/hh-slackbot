@@ -60,6 +60,8 @@ post '/slack/action-endpoint' do
             content_type 'text/plain'
             body request_payload['challenge']
             status 200
+        elsif event_type == 'message'
+            p 'Message'
         elsif event_type == 'app_mention'
             if text.include?('leaderboard')
                 p 'Leaderboard'

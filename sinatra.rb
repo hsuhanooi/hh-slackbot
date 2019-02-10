@@ -40,6 +40,7 @@ Client.auth_test
 
 def send_message(channel, text)
     Client.chat_postMessage(channel: channel, text: text, as_user: true)
+    p "Sending slack message #{channel} #{text}"
 end
 
 post '/slack/action-endpoint' do

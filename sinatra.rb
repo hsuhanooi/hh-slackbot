@@ -81,7 +81,7 @@ post '/slack/action-endpoint' do
                     pr.response = 'fund_it'
                     pr.points = CurrentState.company.get_points('fund_it')
                     pr.company_name = CurrentState.company.name
-                    CurrentState.player_responses.add(pr)
+                    CurrentState.player_responses << pr
                     send_message(channel, "Recorded <@#{user}> would fund it.")
                 elsif text.include?('kill it')
                     p 'Capture kill it'
@@ -90,7 +90,7 @@ post '/slack/action-endpoint' do
                     pr.response = 'kill_it'
                     pr.points = CurrentState.company.get_points('kill_it')
                     pr.company_name = CurrentState.company.name
-                    CurrentState.player_responses.add(pr)
+                    CurrentState.player_responses << pr
                     send_message(channel, "Recorded <@#{user}> would kill it.")
                 elsif text.include?('results')
                     p 'Capture results'

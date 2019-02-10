@@ -62,10 +62,12 @@ post '/slack/action-endpoint' do
             status 200
         elsif event_type == 'app_mention'
             if text.include?('leaderboard')
+                p 'Leaderboard'
                 leaderboard_text = CurrentState.leaderboard
                 send_message(channel, leaderboard_text)
             elsif CurrentState.company == nil
                 if text.include?('new startup')
+                    p 'New Startup'
                     send_message(channel, "Ok <@#{user}>. Let's play.")
                     company = CurrentState.get_new_company
                     send_message(channel, "#{company.name} was started in #{company.year_founded}. It does #{company.description}. Would you fund it?")
@@ -73,6 +75,7 @@ post '/slack/action-endpoint' do
                 end
             else
                 if text.include?('fund it')
+                    p 'Capture fund it'
                     pr = PlayerResponse.new
                     pr.user = user
                     pr.response = 'fund_it'
@@ -81,6 +84,7 @@ post '/slack/action-endpoint' do
                     CurrentState.player_responses.add(pr)
                     send_message(channel, "Recorded <@#{user}> would fund it.")
                 elsif text.include?('kill it')
+                    p 'Capture kill it'
                     pr = PlayerResponse.new
                     pr.user = user
                     pr.response = 'kill_it'
@@ -89,9 +93,11 @@ post '/slack/action-endpoint' do
                     CurrentState.player_responses.add(pr)
                     send_message(channel, "Recorded <@#{user}> would kill it.")
                 elsif text.include?('results')
+                    p 'Capture results'
                     company = CurrentState.company
                     send_message(channel, company.result_description)
                     send_message(channel, CurrentState.current_results)
+                    CurrentState.mark_played
                     CurrentState.company = nil
                 end
             end

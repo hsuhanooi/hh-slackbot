@@ -36,7 +36,7 @@ TEST = {
 CurrentState = State.load('results.json')
 
 Client = Slack::Web::Client.new
-Client.test_auth
+Client.auth_test
 
 def send_message(channel, text)
     Client.chat_postMessage(channel: channel, text: text, as_user: true)

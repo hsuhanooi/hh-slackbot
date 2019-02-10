@@ -43,6 +43,8 @@ def send_message(channel, text)
     p "Sending slack message #{channel} #{text}"
 end
 
+puts "Current State: #{CurrentState.company}"
+
 post '/slack/action-endpoint' do
     status 200
     payload = JSON.parse request.body.read

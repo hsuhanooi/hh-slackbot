@@ -61,33 +61,20 @@ TEST = {
     "authed_users":["UG2N2CNTE"]
 }
 
-# Example response
-# POST https://slack.com/api/chat.postMessage
-# Content-type: application/json
-# Authorization: Bearer YOUR_BOTS_TOKEN
-# {
-#     "text": "Hello <@UA8RXUPSP>! Knock, knock.",
-#     "channel": "CBR2V3XEX"
-# }
-
-def send_response(token, channel, text)
-    uri = URI.parse("https://slack.com/api/chat.postMessage")
-    header = {
-        'Content-type': 'application/json',
-        'Authorization': "Bearer #{token}"
-    }
-    http = Net::HTTP.new(uri.host, uri.port)
-    request = Net::HTTP::Post.new(uri.request_uri, header)
-    body = {
-        'text': text,
-        'channel': channel
-    }
-    request.body = body.to_json
-    response = http.request(request)
-    puts body
-    puts response.body
+class CompanyResponse
+    attr_accessor :user, :response
 end
 
+class State
+    attr_accessor :company
+end
+
+CurrentState = State.new
+
+def send_message(channel, text)
+    client = Slack::Web::Client.new
+    client.chat_postMessage(channel: channel, text: text, as_user: true)
+end
 
 post '/slack/action-endpoint' do
     status 200
@@ -105,9 +92,26 @@ post '/slack/action-endpoint' do
         body request_payload['challenge']
         status 200
     elsif event_type == 'app_mention'
-        respond = "Hello world"
-        client = Slack::Web::Client.new
-        client.chat_postMessage(channel: channel, text: 'Hello World', as_user: true)
+        if CurrentState.company == nil
+            if text.include?('new startup')
+                send_message(channel, "Ok <@#{user}>. Let's play.")
+                company = companies.sample(1).first
+                send_message("#{company.name} was started in 2007. It does magic. Would you fund it?")
+                CurrentState.company = company
+            end
+        else
+            if text.include?('fund it')
+                send_message(channel, "Recorded <@#{user}> would fund it.")
+            elsif text.include?('kill it')
+                send_message(channel, "Recorded <@#{user}> would kill it.")
+            end
+
+            if text.include?('results')
+                send_message(channel, "#{company.name} was killed in 2013. <@#{user}> wins.")
+                CurrentState.company = nil
+            end
+        end
+
         body 'Ok'
         status 200
     end

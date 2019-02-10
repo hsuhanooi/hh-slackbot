@@ -40,7 +40,7 @@ class State
         players_by_name.to_a.sort_by {|k| -k[1]}.each_with_index do |arr,i|
             pname = arr[0]
             points = arr[1]
-            str << "Place: #{i+1} - @#{pname}: #{points} points.\n"
+            str << "Place: #{i+1} - <@#{pname}>: #{points} points.\n"
         end
         str
     end

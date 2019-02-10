@@ -5,10 +5,7 @@ require 'uri'
 require 'json'
 require 'slack-ruby-client'
 
-Slack.configure do |config|
-  # config.token = ENV['SLACK_API_TOKEN']
-  config.token = 'xoxb-402903356593-546750430932-780cb0fu0hlMJYlOXpZ44krA'
-end
+SLACK_API_TOKEN = ENV['SLACK_API_TOKEN']
 
 set :bind, '0.0.0.0'
 
@@ -92,7 +89,7 @@ post '/slack/action-endpoint' do
     payload = JSON.parse request.body.read
     puts payload
     event = payload['event']
-    token = 'xoxb-402903356593-546750430932-rXg4ZuWkHfxjVQVcgtuIbckp'
+    token = SLACK_API_TOKEN
     channel = event['channel']
     text = event['text']
     event_type = event['type']

@@ -55,6 +55,10 @@ class State
 
     def self.load(file)
         str = File.open(file, 'r').read
-        Oj.load(str)
+        if !str.empty?
+            Oj.load(str)
+        else
+            State.new
+        end
     end
 end

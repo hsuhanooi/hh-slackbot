@@ -27,7 +27,7 @@ class State
     def get_new_company
         comp = Companies.sample(1).first
         while (comp)
-            if self.companies_played.include?(comp)
+            if self.companies_played.include?(comp.name)
                 comp = Companies.sample(1).first
             else
                 return comp

@@ -6,6 +6,15 @@ class State
         self.player_responses = []
     end
 
+    def has_response?
+        self.player_responses.each do |player|
+            if self.company.name == player.company_name
+                return true
+            end
+        end
+        false
+    end
+
     def has_answered?(user)
         self.player_responses.each do |player|
             if user == player.user && self.company.name == player.company_name

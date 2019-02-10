@@ -100,11 +100,15 @@ post '/slack/action-endpoint' do
                     end
                 elsif text.include?('results')
                     p 'Capture results'
-                    company = CurrentState.company
-                    send_message(channel, company.result_description)
-                    send_message(channel, CurrentState.current_results)
-                    CurrentState.mark_played
-                    CurrentState.company = nil
+                    if CurrentState.has_response?
+                        company = CurrentState.company
+                        send_message(channel, company.result_description)
+                        send_message(channel, CurrentState.current_results)
+                        CurrentState.mark_played
+                        CurrentState.company = nil
+                    else
+                        send_message(channel, 'Waiting for at least 1 player to respond.')
+                    end
                 end
             end
             CurrentState.save('results.json')

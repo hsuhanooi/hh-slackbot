@@ -76,6 +76,7 @@ def send_response(token, channel, text)
         'channel': channel
     }.to_json
     response = http.request(request)
+    puts response.body
 end
 
 

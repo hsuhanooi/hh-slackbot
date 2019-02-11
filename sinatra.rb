@@ -46,7 +46,9 @@ end
 puts "Current State: #{CurrentState.company}"
 
 def fund_it(user, channel)
-    if !CurrentState.has_answered?(user) && user != 'UG2N2CNTE'
+    return if user == 'UG2N2CNTE'
+
+    if !CurrentState.has_answered?(user)
         pr = PlayerResponse.new
         pr.user = user
         pr.response = 'fund_it'
@@ -60,7 +62,9 @@ def fund_it(user, channel)
 end
 
 def kill_it(user, channel)
-    if !CurrentState.has_answered?(user) && user != 'UG2N2CNTE'
+    return if user == 'UG2N2CNTE'
+
+    if !CurrentState.has_answered?(user)
         pr = PlayerResponse.new
         pr.user = user
         pr.response = 'kill_it'

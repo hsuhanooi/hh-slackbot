@@ -45,7 +45,7 @@ end
 
 puts "Current State: #{CurrentState.company}"
 
-def fund_it(user)
+def fund_it(user, channel)
     if !CurrentState.has_answered?(user)
         pr = PlayerResponse.new
         pr.user = user
@@ -59,7 +59,7 @@ def fund_it(user)
     end
 end
 
-def kill_it(user)
+def kill_it(user, channel)
     if !CurrentState.has_answered?(user)
         pr = PlayerResponse.new
         pr.user = user
@@ -92,10 +92,10 @@ post '/slack/action-endpoint' do
             p 'Message'
             if text.include?('fund it')
                 p 'Capture fund it'
-                fund_it(user)
+                fund_it(user, channel)
             elsif text.include?('kill it')
                 p 'Capture kill it'
-                kill_it(user)
+                kill_it(user, channel)
             end
         elsif event_type == 'app_mention'
             if text.include?('leaderboard')
@@ -117,10 +117,10 @@ post '/slack/action-endpoint' do
             else
                 if text.include?('fund it')
                     p 'Capture fund it'
-                    fund_it(user)
+                    fund_it(user, channel)
                 elsif text.include?('kill it')
                     p 'Capture kill it'
-                    kill_it(user)
+                    kill_it(user, channel)
                 elsif text.include?('results')
                     p 'Capture results'
                     if CurrentState.has_response?
